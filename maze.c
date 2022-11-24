@@ -26,6 +26,7 @@ maze_direction_opposite(enum MazeDirection mdir)
 	case MAZE_DIRECTION_SOUTH:   return MAZE_DIRECTION_NORTH;
 	case MAZE_DIRECTION_EAST:    return MAZE_DIRECTION_WEST;
 	case MAZE_DIRECTION_ALL:     return MAZE_DIRECTION_NONE;
+	default:                     return MAZE_DIRECTION_NONE;
 	}
 }
 
@@ -38,6 +39,7 @@ maze_direction_offset(enum MazeDirection mdir, int *xoff, int *yoff)
 	case MAZE_DIRECTION_WEST:    *xoff = -1; break;
 	case MAZE_DIRECTION_SOUTH:   *yoff =  1; break;
 	case MAZE_DIRECTION_EAST:    *xoff =  1; break;
+	default:                                 break;
 	}
 }
 
