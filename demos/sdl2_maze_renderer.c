@@ -53,7 +53,7 @@ main(int argc, char **argv)
 		dief("SDL_CreateRenderer failed: %s", SDL_GetError());
 	}
 
-	maze = maze_alg_recursive_backtracking(50, 50, 5050);
+	maze = maze_create_recursive_backtracking(50, 50, 5050);
 
 	while (1) {
 		while (SDL_PollEvent(&ev)) {

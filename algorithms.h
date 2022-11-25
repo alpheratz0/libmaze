@@ -4,6 +4,6 @@
 #include "maze.h"
 
 extern struct Maze *
-maze_alg_recursive_backtracking(int width, int height, int seed);
+maze_create_recursive_backtracking(int width, int height, int seed);
 
 #endif
