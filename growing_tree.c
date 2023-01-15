@@ -42,7 +42,7 @@ maze_create_growing_tree(int width, int height, int seed)
 	struct LinkedList *cells;
 	struct Point *pt;
 	enum MazeDirection dirs[4], dir;
-	int i, x, y, ox, oy, pt_index;
+	int i, ox, oy, pt_index;
 
 	srand(seed);
 
