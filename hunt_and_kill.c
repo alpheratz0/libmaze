@@ -3,22 +3,7 @@
 #include "algorithms.h"
 #include "ll.h"
 
-struct Point {
-	int x;
-	int y;
-};
-
 static void _maze_alg_hunt_and_kill_walk(struct Maze *maze, int x, int y);
-
-static struct Point *
-_point_create(int x, int y)
-{
-	struct Point *point;
-	point = malloc(sizeof(struct Point));
-	point->x = x;
-	point->y = y;
-	return point;
-}
 
 static int
 _maze_get_visited_neighbours(struct Maze *maze, int x, int y)
