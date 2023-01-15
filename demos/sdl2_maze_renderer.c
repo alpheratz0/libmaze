@@ -21,7 +21,7 @@ static SDL_Renderer *renderer;
 static struct Maze *maze;
 
 static void
-dief(const char *fmt, ...)
+die(const char *fmt, ...)
 {
 	va_list args;
 
@@ -70,21 +70,21 @@ main(int argc, char **argv)
 	}
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		dief("SDL_Init failed: %s", SDL_GetError());
+		die("SDL_Init failed: %s", SDL_GetError());
 	}
 
 	window = SDL_CreateWindow("sdl2_maze_renderer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 			600, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if (NULL == window) {
-		dief("SDL_CreateWindow failed: %s", SDL_GetError());
+		die("SDL_CreateWindow failed: %s", SDL_GetError());
 	}
 
 	renderer = SDL_CreateRenderer(window, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	if (NULL == renderer) {
-		dief("SDL_CreateRenderer failed: %s", SDL_GetError());
+		die("SDL_CreateRenderer failed: %s", SDL_GetError());
 	}
 
 	while (1) {
