@@ -15,4 +15,7 @@ maze_create_binary_tree(int width, int height, int seed);
 extern struct Maze *
 maze_create_growing_tree(int width, int height, int seed);
 
+extern struct Maze *
+maze_create_kruskal(int width, int height, int seed);
+
 #endif
