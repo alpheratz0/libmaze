@@ -1,7 +1,12 @@
-/*
-	cc sdl2_maze_renderer.c ../maze.c ../recursive_backtracking.c -o sdl2_maze_renderer -lSDL2
-*/
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// compile with:
+//
+// cc sdl2_maze_renderer.c ../*.c -o sdl2_maze_renderer -lSDL2
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -28,12 +33,41 @@ dief(const char *fmt, ...)
 	exit(1);
 }
 
+static void
+usage(void)
+{
+	fprintf(stderr, "usage: sdl2_maze_renderer [-recursive_backtracking] [-sidewinder]\n"
+					"                          [-binary_tree] [-growing_tree] [-kruskal]\n"
+					"                          [-hunt_and_kill]\n");
+	exit(1);
+}
+
 int
 main(int argc, char **argv)
 {
 	int x, y, ax, ay, bx, by, cx, cy, dx, dy;
 	int width, height;
 	SDL_Event ev;
+
+	if (++argv, --argc > 0) {
+		if (!strcmp(*argv, "-recursive_backtracking")) {
+			maze = maze_create_recursive_backtracking(50, 50, 5050);
+		} else if (!strcmp(*argv, "-sidewinder")) {
+			maze = maze_create_sidewinder(50, 50, 5050);
+		} else if (!strcmp(*argv, "-binary_tree")) {
+			maze = maze_create_binary_tree(50, 50, 5050);
+		} else if (!strcmp(*argv, "-growing_tree")) {
+			maze = maze_create_growing_tree(50, 50, 5050);
+		} else if (!strcmp(*argv, "-kruskal")) {
+			maze = maze_create_kruskal(50, 50, 5050);
+		} else if (!strcmp(*argv, "-hunt_and_kill")) {
+			maze = maze_create_hunt_and_kill(50, 50, 5050);
+		} else {
+			usage();
+		}
+	} else {
+		usage();
+	}
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		dief("SDL_Init failed: %s", SDL_GetError());
@@ -52,8 +86,6 @@ main(int argc, char **argv)
 	if (NULL == renderer) {
 		dief("SDL_CreateRenderer failed: %s", SDL_GetError());
 	}
-
-	maze = maze_create_recursive_backtracking(50, 50, 5050);
 
 	while (1) {
 		while (SDL_PollEvent(&ev)) {
