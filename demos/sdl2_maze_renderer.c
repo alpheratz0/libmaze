@@ -151,6 +151,7 @@ quit:
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+	maze_destroy(maze);
 
 	return 0;
 }

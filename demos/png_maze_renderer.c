@@ -206,6 +206,7 @@ main(int argc, char **argv)
 			maze->name, maze->width, maze->height, maze->seed);
 	save_buffer_as_png(filename, pixels, WIDTH, HEIGHT);
 	free(pixels);
+	maze_destroy(maze);
 
 	return 0;
 }
