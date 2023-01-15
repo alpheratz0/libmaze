@@ -39,4 +39,7 @@ maze_fill(struct Maze *maze, enum MazeDirection mdir);
 extern void
 maze_random_directions(enum MazeDirection dirs[4]);
 
+extern void
+maze_destroy(struct Maze *maze);
+
 #endif

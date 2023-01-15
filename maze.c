@@ -89,3 +89,9 @@ maze_random_directions(enum MazeDirection dirs[4])
 			dirs[i++] = dir, leftdirs ^= dir;
 }
 
+extern void
+maze_destroy(struct Maze *maze)
+{
+	free(maze->data);
+	free(maze);
+}
