@@ -17,11 +17,6 @@
 #include "../maze.h"
 #include "../algorithms.h"
 
-#define WIDTH           1024
-#define HEIGHT          1024
-#define COLUMNS           50
-#define ROWS              50
-#define SEED            5050
 #define MARGIN            20
 
 typedef struct {
@@ -44,12 +39,20 @@ die(const char *fmt, ...)
 	exit(1);
 }
 
+static const char *
+enotnull(const char *str, const char *name)
+{
+	if (NULL == str)
+		die("%s cannot be null", name);
+	return str;
+}
+
 static void
 usage(void)
 {
-	fprintf(stderr, "usage: png_maze_renderer [-recursive_backtracking] [-sidewinder]\n"
-					"                         [-binary_tree] [-growing_tree] [-kruskal]\n"
-					"                         [-hunt_and_kill]\n");
+	fprintf(stderr, "usage: png_maze_renderer [-recursive_backtracking] [-sidewinder] [-binary_tree] [-growing_tree]\n"
+	                "                         [-kruskal] [-hunt_and_kill] [-width w] [-height h] [-rows r] [-columns c]\n"
+	                "                         [-seed seed]\n");
 	exit(1);
 }
 
@@ -142,6 +145,9 @@ int
 main(int argc, char **argv)
 {
 	int x, y;
+	int rows, columns;
+	int seed;
+	int img_width, img_height;
 	int width, height;
 	int cell_width, cell_height;
 	int used_width, used_height;
@@ -149,30 +155,47 @@ main(int argc, char **argv)
 	uint32_t *pixels;
 	Point pts[4];
 	char filename[256];
+	maze_algorithm alg;
 
-	if (++argv, --argc > 0) {
+	rows = 50;
+	columns = 50;
+	seed = 5050;
+	img_width = 1024;
+	img_height = 1024;
+	alg = maze_create_recursive_backtracking;
+
+	while (++argv, --argc > 0) {
 		if (!strcmp(*argv, "-recursive_backtracking")) {
-			maze = maze_create_recursive_backtracking(COLUMNS, ROWS, SEED);
+			alg = maze_create_recursive_backtracking;
 		} else if (!strcmp(*argv, "-sidewinder")) {
-			maze = maze_create_sidewinder(COLUMNS, ROWS, SEED);
+			alg = maze_create_sidewinder;
 		} else if (!strcmp(*argv, "-binary_tree")) {
-			maze = maze_create_binary_tree(COLUMNS, ROWS, SEED);
+			alg = maze_create_binary_tree;
 		} else if (!strcmp(*argv, "-growing_tree")) {
-			maze = maze_create_growing_tree(COLUMNS, ROWS, SEED);
+			alg = maze_create_growing_tree;
 		} else if (!strcmp(*argv, "-kruskal")) {
-			maze = maze_create_kruskal(COLUMNS, ROWS, SEED);
+			alg = maze_create_kruskal;
 		} else if (!strcmp(*argv, "-hunt_and_kill")) {
-			maze = maze_create_hunt_and_kill(COLUMNS, ROWS, SEED);
+			alg = maze_create_hunt_and_kill;
+		} else if (!strcmp(*argv, "-width")) {
+			--argc; img_width = atoi(enotnull(*++argv, "width"));
+		} else if (!strcmp(*argv, "-height")) {
+			--argc; img_height = atoi(enotnull(*++argv, "height"));
+		} else if (!strcmp(*argv, "-rows")) {
+			--argc; rows = atoi(enotnull(*++argv, "rows"));
+		} else if (!strcmp(*argv, "-columns")) {
+			--argc; columns = atoi(enotnull(*++argv, "columns"));
+		} else if (!strcmp(*argv, "-seed")) {
+			--argc; seed = atoi(enotnull(*++argv, "seed"));
 		} else {
 			usage();
 		}
-	} else {
-		usage();
 	}
 
-	pixels         =  malloc(sizeof(uint32_t) * WIDTH * HEIGHT);
-	width          =  WIDTH - MARGIN * 2;
-	height         =  HEIGHT - MARGIN * 2;
+	maze           =  alg(rows, columns, seed);
+	pixels         =  malloc(sizeof(uint32_t) * img_width * img_height);
+	width          =  img_width - MARGIN * 2;
+	height         =  img_height - MARGIN * 2;
 	cell_width     =  width / maze->width;
 	cell_height    =  height / maze->height;
 	used_width     =  cell_width * maze->width;
@@ -180,7 +203,7 @@ main(int argc, char **argv)
 	unused_width   =  width - used_width;
 	unused_height  =  height - used_height;
 
-	image_fill(pixels, WIDTH, HEIGHT, 0xffffff);
+	image_fill(pixels, img_width, img_height, 0xffffff);
 
 	for (y = 0; y < maze->height; ++y) {
 		for (x = 0; x < maze->width; ++x) {
@@ -189,22 +212,26 @@ main(int argc, char **argv)
 						   cell_width, cell_height, pts);
 
 			if (maze->data[y*maze->width+x] & MAZE_DIRECTION_NORTH)
-				image_vh_line(pixels, WIDTH, HEIGHT, pts[0], pts[1], 0x000000);
+				image_vh_line(pixels, img_width, img_height,
+						pts[0], pts[1], 0x000000);
 
 			if (maze->data[y*maze->width+x] & MAZE_DIRECTION_SOUTH)
-				image_vh_line(pixels, WIDTH, HEIGHT, pts[3], pts[2], 0x000000);
+				image_vh_line(pixels, img_width, img_height,
+						pts[3], pts[2], 0x000000);
 
 			if (maze->data[y*maze->width+x] & MAZE_DIRECTION_WEST)
-				image_vh_line(pixels, WIDTH, HEIGHT, pts[0], pts[3], 0x000000);
+				image_vh_line(pixels, img_width, img_height,
+						pts[0], pts[3], 0x000000);
 
 			if (maze->data[y*maze->width+x] & MAZE_DIRECTION_EAST)
-				image_vh_line(pixels, WIDTH, HEIGHT, pts[1], pts[2], 0x000000);
+				image_vh_line(pixels, img_width, img_height,
+						pts[1], pts[2], 0x000000);
 		}
 	}
 
 	snprintf(filename, sizeof(filename), "%s_%dx%d_%d.png",
 			maze->name, maze->width, maze->height, maze->seed);
-	save_buffer_as_png(filename, pixels, WIDTH, HEIGHT);
+	save_buffer_as_png(filename, pixels, img_width, img_height);
 	free(pixels);
 	maze_destroy(maze);
 
