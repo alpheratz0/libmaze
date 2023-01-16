@@ -1,6 +1,8 @@
 #ifndef __LIBMAZE_MAZE_H__
 #define __LIBMAZE_MAZE_H__
 
+typedef struct Maze * (*maze_algorithm)(int width, int height, int seed);
+
 enum MazeDirection {
 	MAZE_DIRECTION_NONE   = (0),
 	MAZE_DIRECTION_NORTH  = (1 << 0),
