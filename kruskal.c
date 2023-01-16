@@ -47,7 +47,7 @@ maze_create_kruskal(int width, int height, int seed)
 	srand(seed);
 
 	maze = maze_create(width, height, seed);
-	maze->name = "Kruskal";
+	maze->name = "kruskal";
 	maze_fill(maze, MAZE_DIRECTION_ALL);
 	sets = calloc(width * height, sizeof(struct LinkedList *));
 	edges = NULL;
