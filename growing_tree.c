@@ -47,7 +47,7 @@ maze_create_growing_tree(int width, int height, int seed)
 	srand(seed);
 
 	maze = maze_create(width, height, seed);
-	maze->name = "Growing Tree";
+	maze->name = "growing_tree";
 	maze_fill(maze, MAZE_DIRECTION_ALL);
 	cells = NULL;
 
