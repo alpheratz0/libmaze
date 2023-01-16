@@ -29,7 +29,7 @@ maze_create_sidewinder(int width, int height, int seed)
 	srand(seed);
 
 	maze = maze_create(width, height, seed);
-	maze->name = "Sidewinder";
+	maze->name = "sidewinder";
 	maze_fill(maze, MAZE_DIRECTION_ALL);
 	path = NULL;
 
