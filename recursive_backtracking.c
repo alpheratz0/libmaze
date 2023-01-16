@@ -26,7 +26,7 @@ maze_create_recursive_backtracking(int width, int height, int seed)
 	srand(seed);
 
 	maze = maze_create(width, height, seed);
-	maze->name = "Recursive Backtracking";
+	maze->name = "recursive_backtracking";
 	maze_fill(maze, MAZE_DIRECTION_ALL);
 	_backtrack(maze, 0, 0);
 
