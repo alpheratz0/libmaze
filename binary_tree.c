@@ -38,7 +38,7 @@ maze_create_binary_tree(int width, int height, int seed)
 	srand(seed);
 
 	maze = maze_create(width, height, seed);
-	maze->name = "Binary Tree";
+	maze->name = "binary_tree";
 	maze_fill(maze, MAZE_DIRECTION_ALL);
 
 	for (y = 0; y < height; ++y)
