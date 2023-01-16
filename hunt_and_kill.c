@@ -106,7 +106,7 @@ maze_create_hunt_and_kill(int width, int height, int seed)
 	srand(seed);
 
 	maze = maze_create(width, height, seed);
-	maze->name = "Hunt and Kill";
+	maze->name = "hunt_and_kill";
 	maze_fill(maze, MAZE_DIRECTION_ALL);
 
 	_maze_alg_hunt_and_kill_walk(maze, 0, 0);
