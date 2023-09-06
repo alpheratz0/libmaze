@@ -4,10 +4,11 @@
 include config.mk
 
 OBJ=\
-	maze.o \
-	sidewinder.o \
 	util/dynarr.o \
-	recursive-backtracking.o
+	maze.o \
+	binary-tree.o \
+	recursive-backtracking.o \
+	sidewinder.o
 
 all: libmaze.a
 
