@@ -5,9 +5,11 @@ include config.mk
 
 OBJ=\
 	util/dynarr.o \
+	util/ll.o \
 	maze.o \
 	binary-tree.o \
 	growing-tree.o \
+	kruskal.o \
 	recursive-backtracking.o \
 	sidewinder.o
 
