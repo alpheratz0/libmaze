@@ -1,47 +1,66 @@
-#ifndef __LIBMAZE_MAZE_H__
-#define __LIBMAZE_MAZE_H__
+// Copyright (C) 2023 <alpheratz99@protonmail.com>
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License version 2 as published by
+// the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+// more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc., 59
+// Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-typedef struct Maze * (*maze_algorithm)(int width, int height, int seed);
+#pragma once
 
-enum MazeDirection {
-	MAZE_DIRECTION_NONE   = (0),
-	MAZE_DIRECTION_NORTH  = (1 << 0),
-	MAZE_DIRECTION_WEST   = (1 << 1),
-	MAZE_DIRECTION_SOUTH  = (1 << 2),
-	MAZE_DIRECTION_EAST   = (1 << 3),
-	MAZE_DIRECTION_ALL    = (1 << 4) - 1
+enum {
+	MAZE_WALL_NONE   = (0),
+	MAZE_WALL_NORTH  = (1 << 0),
+	MAZE_WALL_WEST   = (1 << 1),
+	MAZE_WALL_SOUTH  = (1 << 2),
+	MAZE_WALL_EAST   = (1 << 3),
+	MAZE_WALL_ALL    = (1 << 4) - 1
 };
 
-struct Maze {
+#define MAZE_WALL_OPPOSITE(wall) \
+	((wall<<2)|(wall>>2))&0xf
+
+#define MAZE_WALL_OFFSET_X(wall) \
+	((wall==MAZE_WALL_EAST)-(wall==MAZE_WALL_WEST))
+
+#define MAZE_WALL_OFFSET_Y(wall) \
+	((wall==MAZE_WALL_SOUTH)-(wall==MAZE_WALL_NORTH))
+
+#define MAZE_WALL_BY_OFFSET(offx,offy) \
+	(((offx<0)*MAZE_WALL_WEST) | \
+	 ((offx>0)*MAZE_WALL_EAST) | \
+	 ((offy<0)*MAZE_WALL_NORTH) | \
+	 ((offy>0)*MAZE_WALL_SOUTH))
+
+typedef unsigned char maze_wall_t;
+typedef struct maze maze_t;
+typedef void (*maze_algorithm_t)(maze_t *m, int w, int h, int seed);
+
+struct maze {
 	const char *name;
-	int width;
-	int height;
+	int width, height;
 	int seed;
-	enum MazeDirection *data;
+	maze_wall_t *data;
 };
 
-extern struct Maze *
-maze_create(int width, int height, int seed);
+extern void
+maze_init(maze_t *maze, const char *name, int w, int h, int seed);
 
-extern enum MazeDirection
-maze_direction_opposite(enum MazeDirection mdir);
+extern maze_wall_t *
+maze_get(maze_t *m, int x, int y);
+
+extern maze_wall_t *
+maze_get_nbor_sharing_wall(maze_t *m, int x, int y, maze_wall_t wall);
 
 extern void
-maze_direction_offset(enum MazeDirection mdir, int *xoff, int *yoff);
+maze_remove_wall(maze_t *m, int x, int y, maze_wall_t wall);
 
 extern void
-maze_offset_direction(int xoff, int yoff, enum MazeDirection *mdir);
-
-extern int
-maze_is_out_of_bounds(struct Maze *maze, int x, int y);
-
-extern void
-maze_fill(struct Maze *maze, enum MazeDirection mdir);
-
-extern void
-maze_random_directions(enum MazeDirection dirs[4]);
-
-extern void
-maze_destroy(struct Maze *maze);
-
-#endif
+maze_fini(maze_t *maze);

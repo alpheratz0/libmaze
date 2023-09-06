@@ -1,97 +1,71 @@
+// Copyright (C) 2023 <alpheratz99@protonmail.com>
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License version 2 as published by
+// the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+// more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc., 59
+// Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+#include <string.h>
 #include <stdlib.h>
 #include "maze.h"
 
-extern struct Maze *
-maze_create(int width, int height, int seed)
+extern void
+maze_init(maze_t *m, const char *name, int w, int h, int seed)
 {
-	struct Maze *maze;
-
-	maze = malloc(sizeof(struct Maze));
-	maze->width = width;
-	maze->height = height;
-	maze->seed = seed;
-	maze->name = NULL;
-	maze->data = calloc(width * height, sizeof(enum MazeDirection));
-
-	return maze;
+	m->name = name;
+	m->width = w;
+	m->height = h;
+	m->seed = seed;
+	m->data = malloc(w*h);
+	memset(m->data, MAZE_WALL_ALL, w*h);
+	srand(seed);
 }
 
-extern enum MazeDirection
-maze_direction_opposite(enum MazeDirection mdir)
+extern maze_wall_t *
+maze_get(maze_t *m, int x, int y)
 {
-	switch (mdir) {
-	case MAZE_DIRECTION_NONE:    return MAZE_DIRECTION_ALL;
-	case MAZE_DIRECTION_NORTH:   return MAZE_DIRECTION_SOUTH;
-	case MAZE_DIRECTION_WEST:    return MAZE_DIRECTION_EAST;
-	case MAZE_DIRECTION_SOUTH:   return MAZE_DIRECTION_NORTH;
-	case MAZE_DIRECTION_EAST:    return MAZE_DIRECTION_WEST;
-	case MAZE_DIRECTION_ALL:     return MAZE_DIRECTION_NONE;
-	default:                     return MAZE_DIRECTION_NONE;
-	}
+	if (x >= 0 && x < m->width && y >= 0 && y < m->height)
+		return &m->data[y*m->width+x];
+	return NULL;
+}
+
+extern maze_wall_t *
+maze_get_nbor_sharing_wall(maze_t *m, int x, int y, maze_wall_t wall)
+{
+	maze_wall_t *nbor;
+	int nbor_x, nbor_y;
+
+	nbor_x = x + MAZE_WALL_OFFSET_X(wall);
+	nbor_y = y + MAZE_WALL_OFFSET_Y(wall);
+
+	nbor = maze_get(m, nbor_x, nbor_y);
+
+	return nbor;
 }
 
 extern void
-maze_direction_offset(enum MazeDirection mdir, int *xoff, int *yoff)
+maze_remove_wall(maze_t *m, int x, int y, maze_wall_t wall)
 {
-	*xoff = *yoff = 0;
-	switch (mdir) {
-	case MAZE_DIRECTION_NORTH:   *yoff = -1; break;
-	case MAZE_DIRECTION_WEST:    *xoff = -1; break;
-	case MAZE_DIRECTION_SOUTH:   *yoff =  1; break;
-	case MAZE_DIRECTION_EAST:    *xoff =  1; break;
-	default:                                 break;
-	}
+	maze_wall_t *target, *nbor;
+
+	target = maze_get(m, x, y);
+	nbor = maze_get_nbor_sharing_wall(m, x, y, wall);
+
+	*target ^= wall;
+	*nbor ^= MAZE_WALL_OPPOSITE(wall);
 }
 
 extern void
-maze_offset_direction(int xoff, int yoff, enum MazeDirection *mdir)
-{
-	*mdir = MAZE_DIRECTION_NONE;
-	if (xoff < 0) *mdir |= MAZE_DIRECTION_WEST;
-	if (xoff > 0) *mdir |= MAZE_DIRECTION_EAST;
-	if (yoff < 0) *mdir |= MAZE_DIRECTION_NORTH;
-	if (yoff > 0) *mdir |= MAZE_DIRECTION_SOUTH;
-}
-
-extern int
-maze_is_out_of_bounds(struct Maze *maze, int x, int y)
-{
-	if (x < 0 || x >= maze->width) return 1;
-	if (y < 0 || y >= maze->height) return 1;
-	return 0;
-}
-
-extern void
-maze_fill(struct Maze *maze, enum MazeDirection mdir)
-{
-	int x, y;
-	for (y = 0; y < maze->height; ++y)
-		for (x = 0; x < maze->width; ++x)
-			maze->data[y*maze->width+x] = mdir;
-	for (y = 0; y < maze->height; ++y) {
-		maze->data[(y  )*maze->width  ] |= MAZE_DIRECTION_WEST;
-		maze->data[(y+1)*maze->width-1] |= MAZE_DIRECTION_EAST;
-	}
-	for (x = 0; x < maze->width; ++x) {
-		maze->data[x]                              |= MAZE_DIRECTION_NORTH;
-		maze->data[(maze->height-1)*maze->width+x] |= MAZE_DIRECTION_SOUTH;
-	}
-}
-
-extern void
-maze_random_directions(enum MazeDirection dirs[4])
-{
-	int i;
-	enum MazeDirection dir, leftdirs;
-	leftdirs = MAZE_DIRECTION_ALL;
-	for (i = 0; i < 4;)
-		if ((dir = (1 << (rand() % 4))) & leftdirs)
-			dirs[i++] = dir, leftdirs ^= dir;
-}
-
-extern void
-maze_destroy(struct Maze *maze)
+maze_fini(maze_t *maze)
 {
 	free(maze->data);
-	free(maze);
+	memset(maze, 0, sizeof(maze_t));
 }
