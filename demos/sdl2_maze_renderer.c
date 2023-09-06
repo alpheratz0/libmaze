@@ -14,14 +14,7 @@
 #include "../maze.h"
 #include "../algorithms.h"
 
-#define COLUMNS           50
-#define ROWS              50
-#define SEED            5050
-#define MARGIN            20
-
-static SDL_Window *window;
-static SDL_Renderer *renderer;
-static struct Maze *maze;
+#define MARGIN 20
 
 static void
 die(const char *fmt, ...)
@@ -41,8 +34,17 @@ usage(void)
 {
 	fprintf(stderr, "usage: sdl2_maze_renderer [-recursive_backtracking] [-sidewinder]\n"
 					"                          [-binary_tree] [-growing_tree] [-kruskal]\n"
-					"                          [-hunt_and_kill]\n");
+					"                          [-hunt_and_kill] [-rows rows]\n"
+					"                          [-columns columns] [-seed seed]\n");
 	exit(1);
+}
+
+static const char *
+enotnull(const char *str, const char *name)
+{
+	if (NULL == str)
+		die("%s cannot be null", name);
+	return str;
 }
 
 static void
@@ -61,33 +63,48 @@ rect_to_points(int x, int y, int w, int h, SDL_Point *points)
 int
 main(int argc, char **argv)
 {
+	SDL_Window *window;
+	SDL_Renderer *renderer;
 	int x, y;
 	int width, height;
 	int cell_width, cell_height;
 	int used_width, used_height;
 	int unused_width, unused_height;
+	int rows, columns, seed;
 	SDL_Point pts[4];
 	SDL_Event ev;
+	maze_algorithm_t alg;
+	maze_t maze;
 
-	if (++argv, --argc > 0) {
+	columns = rows = 50;
+	seed = 5050;
+	alg = mazealg_recursive_backtracking;
+
+	while (++argv, --argc > 0) {
 		if (!strcmp(*argv, "-recursive_backtracking")) {
-			maze = maze_create_recursive_backtracking(COLUMNS, ROWS, SEED);
+			alg = mazealg_recursive_backtracking;
 		} else if (!strcmp(*argv, "-sidewinder")) {
-			maze = maze_create_sidewinder(COLUMNS, ROWS, SEED);
+			alg = mazealg_sidewinder;
 		} else if (!strcmp(*argv, "-binary_tree")) {
-			maze = maze_create_binary_tree(COLUMNS, ROWS, SEED);
+			alg = mazealg_binary_tree;
 		} else if (!strcmp(*argv, "-growing_tree")) {
-			maze = maze_create_growing_tree(COLUMNS, ROWS, SEED);
+			alg = mazealg_growing_tree;
 		} else if (!strcmp(*argv, "-kruskal")) {
-			maze = maze_create_kruskal(COLUMNS, ROWS, SEED);
+			alg = mazealg_kruskal;
 		} else if (!strcmp(*argv, "-hunt_and_kill")) {
-			maze = maze_create_hunt_and_kill(COLUMNS, ROWS, SEED);
+			alg = mazealg_hunt_and_kill;
+		} else if (!strcmp(*argv, "-rows")) {
+			--argc; rows = atoi(enotnull(*++argv, "rows"));
+		} else if (!strcmp(*argv, "-columns")) {
+			--argc; columns = atoi(enotnull(*++argv, "columns"));
+		} else if (!strcmp(*argv, "-seed")) {
+			--argc; seed = atoi(enotnull(*++argv, "seed"));
 		} else {
 			usage();
 		}
-	} else {
-		usage();
 	}
+
+	alg(&maze, columns, rows, seed);
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		die("SDL_Init failed: %s", SDL_GetError());
@@ -116,29 +133,29 @@ main(int argc, char **argv)
 
 		width         -=  MARGIN * 2;
 		height        -=  MARGIN * 2;
-		cell_width     =  width / maze->width;
-		cell_height    =  height / maze->height;
-		used_width     =  cell_width * maze->width;
-		used_height    =  cell_height * maze->height;
+		cell_width     =  width / maze.width;
+		cell_height    =  height / maze.height;
+		used_width     =  cell_width * maze.width;
+		used_height    =  cell_height * maze.height;
 		unused_width   =  width - used_width;
 		unused_height  =  height - used_height;
 
-		for (y = 0; y < maze->height; ++y) {
-			for (x = 0; x < maze->width; ++x) {
+		for (y = 0; y < maze.height; ++y) {
+			for (x = 0; x < maze.width; ++x) {
 				rect_to_points(MARGIN + (x * cell_width) + unused_width / 2,
 						       MARGIN + (y * cell_height) + unused_height / 2,
 							   cell_width, cell_height, pts);
 
-				if (maze->data[y*maze->width+x] & MAZE_DIRECTION_NORTH)
+				if (maze.data[y*maze.width+x] & MAZE_WALL_NORTH)
 					SDL_RenderDrawLine(renderer, pts[0].x, pts[0].y, pts[1].x, pts[1].y);
 
-				if (maze->data[y*maze->width+x] & MAZE_DIRECTION_SOUTH)
+				if (maze.data[y*maze.width+x] & MAZE_WALL_SOUTH)
 					SDL_RenderDrawLine(renderer, pts[3].x, pts[3].y, pts[2].x, pts[2].y);
 
-				if (maze->data[y*maze->width+x] & MAZE_DIRECTION_WEST)
+				if (maze.data[y*maze.width+x] & MAZE_WALL_WEST)
 					SDL_RenderDrawLine(renderer, pts[0].x, pts[0].y, pts[3].x, pts[3].y);
 
-				if (maze->data[y*maze->width+x] & MAZE_DIRECTION_EAST)
+				if (maze.data[y*maze.width+x] & MAZE_WALL_EAST)
 					SDL_RenderDrawLine(renderer, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
 			}
 		}
@@ -151,7 +168,7 @@ quit:
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
-	maze_destroy(maze);
+	maze_fini(&maze);
 
 	return 0;
 }
