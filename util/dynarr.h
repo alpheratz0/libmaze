@@ -46,6 +46,9 @@ dynarr_pop(dynarr_t *dynarr);
 extern void *
 dynarr_remove_at(dynarr_t *dynarr, int index);
 
+extern void *
+dynarr_remove(dynarr_t *dynarr, void *elem);
+
 extern void
 dynarr_foreach(dynarr_t *dynarr, dynarr_action_t act);
 

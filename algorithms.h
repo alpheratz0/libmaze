@@ -25,3 +25,6 @@ mazealg_sidewinder(maze_t *m, int w, int h, int seed);
 
 extern void
 mazealg_binary_tree(maze_t *m, int w, int h, int seed);
+
+extern void
+mazealg_growing_tree(maze_t *m, int w, int h, int seed);

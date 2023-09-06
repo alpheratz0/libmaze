@@ -107,6 +107,16 @@ dynarr_remove_at(dynarr_t *dynarr, int index)
 	return elem;
 }
 
+extern void *
+dynarr_remove(dynarr_t *dynarr, void *elem)
+{
+	size_t i;
+	for (i = 0; i < dynarr->len; ++i)
+		if (dynarr->elements[i] == elem)
+			return dynarr_remove_at(dynarr, i);
+	return NULL;
+}
+
 extern void
 dynarr_foreach(dynarr_t *dynarr, dynarr_action_t act)
 {
