@@ -31,3 +31,6 @@ mazealg_growing_tree(maze_t *m, int w, int h, int seed);
 
 extern void
 mazealg_kruskal(maze_t *m, int w, int h, int seed);
+
+extern void
+mazealg_hunt_and_kill(maze_t *m, int w, int h, int seed);
