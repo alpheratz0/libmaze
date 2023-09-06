@@ -17,6 +17,12 @@
 
 #include <stddef.h>
 
+#define dynarr_first(arr) \
+	dynarr_get(arr, 0)
+
+#define dynarr_last(arr) \
+	dynarr_get(arr, arr->len-1)
+
 typedef struct {
 	size_t len;
 	size_t cap;
@@ -36,6 +42,9 @@ dynarr_push2(dynarr_t **dynarr, void *elem);
 
 extern void *
 dynarr_get(dynarr_t *dynarr, int index);
+
+extern void
+dynarr_set(dynarr_t *dynarr, int index, void *elem);
 
 extern void *
 dynarr_shift(dynarr_t *dynarr);

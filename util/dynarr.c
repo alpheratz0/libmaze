@@ -61,6 +61,14 @@ dynarr_get(dynarr_t *dynarr, int index)
 	return dynarr->elements[index];
 }
 
+extern void
+dynarr_set(dynarr_t *dynarr, int index, void *elem)
+{
+	if (index < 0 || index >= (int)(dynarr->len))
+		return;
+	dynarr->elements[index] = elem;
+}
+
 extern void *
 dynarr_shift(dynarr_t *dynarr)
 {
