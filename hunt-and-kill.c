@@ -118,7 +118,6 @@ hunt(maze_t *m)
 {
 	size_t i;
 	int x, y;
-	int nx, ny;
 	maze_wall_t *nbor, walls[4];
 
 	walls[0] = MAZE_WALL_NORTH;
