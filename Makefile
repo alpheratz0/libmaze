@@ -5,6 +5,8 @@ include config.mk
 
 OBJ=\
 	maze.o \
+	sidewinder.o \
+	util/dynarr.o \
 	recursive_backtracking.o
 
 all: libmaze.a
