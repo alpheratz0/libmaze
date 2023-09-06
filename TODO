@@ -1,3 +1,4 @@
 [] helper structures for algorithms (hashtable, list, queue, etc)
 [] add prim's algorithm
 [] improve kruskal performance
+[] move repeated functions & code to separate modules
