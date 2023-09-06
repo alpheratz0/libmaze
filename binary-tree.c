@@ -37,7 +37,7 @@ mazealg_binary_tree(maze_t *m, int w, int h, int seed)
 {
 	size_t i;
 	int x, y, nx, ny;
-	maze_wall_t *home, *nbor, bias[2];
+	maze_wall_t *home, bias[2];
 
 	bias[0] = MAZE_WALL_EAST;
 	bias[1] = MAZE_WALL_NORTH;
@@ -54,8 +54,7 @@ mazealg_binary_tree(maze_t *m, int w, int h, int seed)
 				nx = x + MAZE_WALL_OFFSET_X(bias[i]);
 				ny = y + MAZE_WALL_OFFSET_Y(bias[i]);
 
-				if (*home & bias[i]
-						&& (nbor = maze_get(m, nx, ny))) {
+				if ((*home & bias[i]) && maze_get(m, nx, ny)) {
 					maze_remove_wall(m, x, y, bias[i]);
 					break;
 				}
