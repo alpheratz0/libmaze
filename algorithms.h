@@ -22,3 +22,6 @@ mazealg_recursive_backtracking(maze_t *m, int w, int h, int seed);
 
 extern void
 mazealg_sidewinder(maze_t *m, int w, int h, int seed);
+
+extern void
+mazealg_binary_tree(maze_t *m, int w, int h, int seed);
