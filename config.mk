@@ -3,5 +3,5 @@
 
 AR=ar
 CC=cc
-CFLAGS=-ansi -pedantic -Wall -Wextra -Os
+CFLAGS=-std=c99 -pedantic -Wall -Wextra -Os
 PREFIX=/usr/local
