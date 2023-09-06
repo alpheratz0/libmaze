@@ -15,10 +15,42 @@
 
 #pragma once
 
-#include "maze.h"
+#include <stddef.h>
+
+typedef struct {
+	size_t len;
+	size_t cap;
+	void **elements;
+} dynarr_t;
+
+typedef void (*dynarr_action_t)(void *elem);
+
+extern dynarr_t *
+dynarr_new(void);
 
 extern void
-mazealg_recursive_backtracking(maze_t *m, int w, int h, int seed);
+dynarr_push(dynarr_t *dynarr, void *elem);
 
 extern void
-mazealg_sidewinder(maze_t *m, int w, int h, int seed);
+dynarr_push2(dynarr_t **dynarr, void *elem);
+
+extern void *
+dynarr_get(dynarr_t *dynarr, int index);
+
+extern void *
+dynarr_shift(dynarr_t *dynarr);
+
+extern void *
+dynarr_pop(dynarr_t *dynarr);
+
+extern void *
+dynarr_remove_at(dynarr_t *dynarr, int index);
+
+extern void
+dynarr_foreach(dynarr_t *dynarr, dynarr_action_t act);
+
+extern void
+dynarr_free(dynarr_t *dynarr, dynarr_action_t act);
+
+extern void
+dynarr_free2(dynarr_t **dynarr, dynarr_action_t act);
