@@ -4,14 +4,8 @@
 include config.mk
 
 OBJ=\
-	binary_tree.o \
-	growing_tree.o \
-	hunt_and_kill.o \
-	kruskal.o \
-	ll.o \
 	maze.o \
-	recursive_backtracking.o \
-	sidewinder.o
+	recursive_backtracking.o
 
 all: libmaze.a
 
