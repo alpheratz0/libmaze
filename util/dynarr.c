@@ -137,7 +137,7 @@ extern void
 dynarr_free(dynarr_t *dynarr, dynarr_action_t act)
 {
 	if (!dynarr) return;
-	dynarr_foreach(dynarr, act);
+	if (act) dynarr_foreach(dynarr, act);
 	free(dynarr->elements);
 	free(dynarr);
 }
