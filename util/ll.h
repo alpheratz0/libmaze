@@ -15,19 +15,28 @@
 
 #pragma once
 
-#include "maze.h"
+#include <stdbool.h>
+
+typedef struct node node_t;
+typedef struct node ll_t;
+
+struct node {
+	node_t *next;
+	bool data_owned;
+	void *data;
+};
+
+extern node_t *
+ll_node_new(void *data, bool data_owned);
+
+extern node_t *
+ll_tail(ll_t *ll);
+
+extern int
+ll_share_nodes(ll_t *ll, ll_t *other);
 
 extern void
-mazealg_recursive_backtracking(maze_t *m, int w, int h, int seed);
+ll_join(ll_t *ll, ll_t *other);
 
 extern void
-mazealg_sidewinder(maze_t *m, int w, int h, int seed);
-
-extern void
-mazealg_binary_tree(maze_t *m, int w, int h, int seed);
-
-extern void
-mazealg_growing_tree(maze_t *m, int w, int h, int seed);
-
-extern void
-mazealg_kruskal(maze_t *m, int w, int h, int seed);
+ll_node_free(node_t *node);

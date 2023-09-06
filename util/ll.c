@@ -13,21 +13,53 @@
 // with this program; if not, write to the Free Software Foundation, Inc., 59
 // Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-#pragma once
+#include <stdbool.h>
+#include <stdlib.h>
 
-#include "maze.h"
+#include "ll.h"
+
+extern node_t *
+ll_node_new(void *data, bool data_owned)
+{
+	node_t *node;
+
+	node = malloc(sizeof(node_t));
+
+	node->next = NULL;
+	node->data_owned = data_owned;
+	node->data = data;
+
+	return node;
+}
+
+extern node_t *
+ll_tail(ll_t *ll)
+{
+	while (ll->next != NULL)
+		ll = ll->next;
+	return ll;
+}
+
+extern int
+ll_share_nodes(ll_t *ll, ll_t *other)
+{
+	return ll_tail(ll) == ll_tail(other);
+}
 
 extern void
-mazealg_recursive_backtracking(maze_t *m, int w, int h, int seed);
+ll_join(ll_t *ll, ll_t *other)
+{
+	node_t *tail;
+	if (ll_share_nodes(ll, other))
+		return;
+	tail = ll_tail(ll);
+	tail->next = other;
+}
 
 extern void
-mazealg_sidewinder(maze_t *m, int w, int h, int seed);
-
-extern void
-mazealg_binary_tree(maze_t *m, int w, int h, int seed);
-
-extern void
-mazealg_growing_tree(maze_t *m, int w, int h, int seed);
-
-extern void
-mazealg_kruskal(maze_t *m, int w, int h, int seed);
+ll_node_free(node_t *node)
+{
+	if (node->data_owned)
+		free(node->data);
+	free(node);
+}
