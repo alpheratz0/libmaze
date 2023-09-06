@@ -7,7 +7,7 @@ OBJ=\
 	maze.o \
 	sidewinder.o \
 	util/dynarr.o \
-	recursive_backtracking.o
+	recursive-backtracking.o
 
 all: libmaze.a
 
