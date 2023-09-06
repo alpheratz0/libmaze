@@ -9,6 +9,7 @@ OBJ=\
 	maze.o \
 	binary-tree.o \
 	growing-tree.o \
+	hunt-and-kill.o \
 	kruskal.o \
 	recursive-backtracking.o \
 	sidewinder.o
