@@ -78,7 +78,7 @@ mazealg_kruskal(maze_t *m, int w, int h, int seed)
 
 	while (edges->len > 0) {
 		// select random available edge
-		edge = dynarr_get(edges, rand()%edges->len);
+		edge  = dynarr_get(edges, rand()%edges->len);
 
 		path1 = dynarr_get(paths, edge->y*m->width+edge->x);
 		path2 = dynarr_get(paths, edge->ny*m->width+edge->nx);
