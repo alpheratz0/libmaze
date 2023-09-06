@@ -7,6 +7,7 @@ OBJ=\
 	util/dynarr.o \
 	maze.o \
 	binary-tree.o \
+	growing-tree.o \
 	recursive-backtracking.o \
 	sidewinder.o
 
