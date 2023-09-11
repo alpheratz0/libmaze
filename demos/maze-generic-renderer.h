@@ -15,7 +15,7 @@
 
 #include "maze.h"
 
-#define MARGIN 2
+#define MARGIN 20
 
 #define RECT(x,y,w,h) (const rect_t){x,y,w,h}
 #define POINT(x,y) (const point_t){x,y}
