@@ -18,19 +18,19 @@
 #include "maze.h"
 
 extern void
-mazealg_recursive_backtracking(maze_t *m, int w, int h, int seed);
+maze_recursive_backtracking(maze_t *m, int w, int h, int seed);
 
 extern void
-mazealg_sidewinder(maze_t *m, int w, int h, int seed);
+maze_sidewinder(maze_t *m, int w, int h, int seed);
 
 extern void
-mazealg_binary_tree(maze_t *m, int w, int h, int seed);
+maze_binary_tree(maze_t *m, int w, int h, int seed);
 
 extern void
-mazealg_growing_tree(maze_t *m, int w, int h, int seed);
+maze_growing_tree(maze_t *m, int w, int h, int seed);
 
 extern void
-mazealg_kruskal(maze_t *m, int w, int h, int seed);
+maze_kruskal(maze_t *m, int w, int h, int seed);
 
 extern void
-mazealg_hunt_and_kill(maze_t *m, int w, int h, int seed);
+maze_hunt_and_kill(maze_t *m, int w, int h, int seed);

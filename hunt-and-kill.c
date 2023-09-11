@@ -144,7 +144,7 @@ hunt(maze_t *m)
 }
 
 extern void
-mazealg_hunt_and_kill(maze_t *m, int w, int h, int seed)
+maze_hunt_and_kill(maze_t *m, int w, int h, int seed)
 {
 	maze_init(m, "hunt_and_kill", w, h, seed);
 	walk(m, rand()%w, rand()%h);

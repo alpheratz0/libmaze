@@ -34,7 +34,7 @@ point_new(int x, int y)
 }
 
 extern void
-mazealg_sidewinder(maze_t *m, int w, int h, int seed)
+maze_sidewinder(maze_t *m, int w, int h, int seed)
 {
 	dynarr_t *path;
 	point_t *pt;

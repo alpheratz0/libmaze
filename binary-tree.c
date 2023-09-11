@@ -33,7 +33,7 @@ shuffle(void *arr, size_t n, size_t size)
 }
 
 extern void
-mazealg_binary_tree(maze_t *m, int w, int h, int seed)
+maze_binary_tree(maze_t *m, int w, int h, int seed)
 {
 	size_t i;
 	int x, y, nx, ny;

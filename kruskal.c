@@ -55,7 +55,7 @@ edge_new(int x, int y, maze_wall_t wall)
 }
 
 extern void
-mazealg_kruskal(maze_t *m, int w, int h, int seed)
+maze_kruskal(maze_t *m, int w, int h, int seed)
 {
 	dynarr_t *edges, *paths;
 	node_t *path1, *path2;

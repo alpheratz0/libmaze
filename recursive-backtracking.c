@@ -59,7 +59,7 @@ backtrack(maze_t *m, int x, int y)
 }
 
 extern void
-mazealg_recursive_backtracking(maze_t *m, int w, int h, int seed)
+maze_recursive_backtracking(maze_t *m, int w, int h, int seed)
 {
 	maze_init(m, "recursive_backtracking", w, h, seed);
 	backtrack(m, rand()%m->width, rand()%m->height);

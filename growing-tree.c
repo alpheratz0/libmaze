@@ -69,7 +69,7 @@ any_full_nbor(maze_t *m, int x, int y)
 }
 
 extern void
-mazealg_growing_tree(maze_t *m, int w, int h, int seed)
+maze_growing_tree(maze_t *m, int w, int h, int seed)
 {
 	size_t i;
 	dynarr_t *cells;
