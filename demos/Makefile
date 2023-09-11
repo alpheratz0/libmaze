@@ -1,13 +1,16 @@
 .POSIX:
 .PHONY: all clean
 
-all: png_maze_renderer sdl2_maze_renderer
+all: maze_png_renderer maze_sdl_renderer
 
-png_maze_renderer: png_maze_renderer.c
-	cc png_maze_renderer.c ../*.c ../util/*.c -o png_maze_renderer -lpng
+libmaze.a:
+	make -sC .. && mv ../libmaze.a . && make -sC .. clean
 
-sdl2_maze_renderer: sdl2_maze_renderer.c
-	cc sdl2_maze_renderer.c ../*.c ../util/*.c -o sdl2_maze_renderer -lSDL2
+maze_png_renderer: maze-png-renderer.c maze-generic-renderer.h libmaze.a
+	$(CC) $< libmaze.a -I.. -o $@ -lpng
+
+maze_sdl_renderer: maze-sdl-renderer.c maze-generic-renderer.h libmaze.a
+	$(CC) $< libmaze.a -I.. -o $@ -lSDL2
 
 clean:
-	rm -f png_maze_renderer sdl2_maze_renderer
+	rm -f libmaze.a maze_png_renderer maze_sdl_renderer
