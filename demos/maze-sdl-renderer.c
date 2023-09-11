@@ -26,7 +26,7 @@
 #define WIN_WIDTH 400
 #define WIN_HEIGHT 400
 #define MAZE_ROWS 50
-#define MAZE_COLUMS 50
+#define MAZE_COLUMNS 50
 
 #define USE_LINES
 
@@ -142,7 +142,7 @@ main(int argc, char **argv)
 		usage();
 
 	srand(time(NULL));
-	alg(&maze, MAZE_COLUMS, MAZE_ROWS, rand());
+	alg(&maze, MAZE_COLUMNS, MAZE_ROWS, rand());
 
 	init_sdl_app(&app);
 
