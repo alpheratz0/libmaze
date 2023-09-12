@@ -203,7 +203,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	alg(&maze, rows, columns, seed);
+	alg(&maze, columns, rows, seed);
 
 	img.px = malloc(sizeof(uint32_t) * img.w * img.h);
 
