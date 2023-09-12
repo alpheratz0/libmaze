@@ -125,6 +125,7 @@ maze_algorithm_from_opt(const char *opt)
 	if (!strcmp(opt, "-binary_tree")) return maze_binary_tree;
 	if (!strcmp(opt, "-growing_tree")) return maze_growing_tree;
 	if (!strcmp(opt, "-hunt_and_kill")) return maze_hunt_and_kill;
+	if (!strcmp(opt, "-kruskal")) return maze_kruskal;
 	return NULL;
 }
 
