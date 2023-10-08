@@ -166,8 +166,8 @@ main(int argc, char **argv)
 	rows = 50;
 	columns = 50;
 	seed = 5050;
-	img.w = 1024;
-	img.h = 1024;
+	img.w = 400;
+	img.h = 400;
 	lines = true;
 	alg = maze_recursive_backtracking;
 
